@@ -1,0 +1,26 @@
+* {margin: 0;	padding: 0;}
+*,*:before,*:after{box-sizing: border-box;}
+a,a:visited,a:hover{text-decoration: none;}
+ol, ul, li{list-style: none;}
+
+
+body {
+	padding: 50px 10%;
+}
+
+.title {
+	display: inline-block;
+	padding: 2px 8px;
+
+	border-radius: 5px;
+	background-color: rgba(255, 247, 177, .8);
+	box-shadow: 0 2px 5px #999;
+
+	font-size: 12px;
+	color: #000;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+}
