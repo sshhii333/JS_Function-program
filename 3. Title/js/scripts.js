@@ -1,49 +1,64 @@
 function title() {
-	let elems = document.querySelectorAll('[title]');
-
-	if (!elems || elems.length == 0) return;
-
-	function create(value) {
+	let create = (value) => {
 		if (!value) return;
 
 		let elem = document.createElement('div');
 		elem.classList.add('title');
 		elem.innerHTML = value;
+		elem.style = `display: inline-block; padding: 2px 8px; border-radius: 5px; background-color: rgba(255, 247, 177, .8); box-shadow: 0 2px 5px #999; font-size: 12px; color: #000; position: absolute; top: 0; left: 0; z-index: 999;`;
 
 		return elem;
 	};
 
-	function clear() {
+	let clear = () => {
 		let elems = document.querySelectorAll('.title');
-		elems.forEach((elem) => {
-			elem.remove();
-		});
+		elems.forEach(elem => elem.remove());
 	};
 
-	elems.forEach((elem) => {
-		let titleElem = '';
+	let setPosition = (x, y) => {
+		x = x + 20;
+		y = y + 20;
 
-		elem.addEventListener('mouseenter', (event) => {
-			let value = elem.title;
+		elemTitle.style.top = `${y}px`;
+		elemTitle.style.left = `${x}px`;
+	};
 
-			titleElem = create(value);
-			document.body.append(titleElem);
+	let enter = (event) => {
+		clear();
 
-			titleElem.style.top = (event.pageY + 20) + "px";
-			titleElem.style.left = (event.pageX + 20) + "px";
+			valueTmp = event.target.title;
 
-		});
+			elemTitle = create(valueTmp);
 
-		elem.addEventListener('mouseleave', () => {
-			clear();
-		});
+			if (!elemTitle) return;
 
-		elem.addEventListener('mousemove', (event) => {
-			titleElem.style.top = (event.pageY + 20) + "px";
-			titleElem.style.left = (event.pageX + 20) + "px";
-		});
+			event.target.removeAttribute('title');
+			setPosition(event.x, event.y);
+
+			document.body.append(elemTitle);
+	};
+
+	let move = (event) => {
+		setPosition(event.x, event.y);
+	};
+
+	let leave = (event) => {
+		event.target.title = valueTmp;
+
+		clear();
+	};
+
+	let titleElems = document.querySelectorAll('[title]');
+	if (!titleElems || titleElems.length == 0) return;
+
+	let valueTmp = null;
+	let elemTitle = null;
+
+	titleElems.forEach((elem) => {
+		elem.addEventListener('mouseenter', enter);
+		elem.addEventListener('mousemove', move);
+		elem.addEventListener('mouseleave', leave);
 	});
-
 };
 
 window.addEventListener('load', function () {

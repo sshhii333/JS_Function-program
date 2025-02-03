@@ -7,39 +7,47 @@ function accordion() {
 				div
 	*/
 
-	let elems = document.querySelectorAll('[data-accordion]');
-	if (!elems || elems.length == 0) return;
+	let accordion = () => {
+		let setAccordions = document.querySelectorAll('[data-accordion]');
+		if (!setAccordions || setAccordions.length == 0) return;
 
-	function closeAll(accordion) {
-		if (!accordion) return;
-		let liElems = accordion.querySelectorAll('li');
+		let closeAll = (accordion) => {
+			if (!accordion) return;
 
-		liElems.forEach((li) => {
-			li.classList.remove('active');
+			let liElems = accordion.querySelectorAll('ul li');
+			if (!liElems || liElems.length == 0) return;
+
+			liElems.forEach((li) => {
+				li.classList.remove('active');
+			});
+		};
+
+		let active = (e) => {
+			let perentTitle = e.target.closest('li');
+
+			if (!perentTitle.classList.contains('active')) {
+				closeAll(perentTitle.closest('[data-accordion]'));
+			};
+
+			perentTitle.classList.toggle('active');
+		};
+
+		setAccordions.forEach((elemAccordion) => {
+			let titles = elemAccordion.querySelectorAll('ul li h3');
+			if (!titles) return;
+
+			titles.forEach((elemTitles) => {
+				elemTitles.addEventListener('click', active);
+			});
 		});
 	};
 
-	elems.forEach((elem) => {
-		let titles = elem.querySelectorAll('h3');
-		if (!titles) return;
 
-		titles.forEach((title) => {
-			title.addEventListener('click', () => {
-				let parentLi = title.closest('li'); //title = event.target
-				if (!parentLi) return;
+	window.addEventListener('load', function () {
 
-				if (!parentLi.classList.contains('active')) closeAll(elem);
-				parentLi.classList.toggle('active');
-			});
-		});
+		accordion();
+
 	});
-};
-
-window.addEventListener('load', function () {
-
-	accordion();
-	
-});
 
 /*
 1. прописываем для аккордиона в html метку для поиска data-accordion
